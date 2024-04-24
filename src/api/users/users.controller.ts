@@ -1,42 +1,22 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Controller, Put, Body, UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { SetMetadata } from '@nestjs/common';
+import { RolesGuard } from '../auth/guard/role.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
+import ResponseDto from 'src/util/response.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Put('update')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @SetMetadata('roles', ['user'])
+  async updateUser(
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() req: any,
+  ): Promise<ResponseDto> {
+    return this.usersService.update(req.user.userId, updateUserDto);
   }
 }

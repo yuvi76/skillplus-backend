@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User, UserModel } from '../users/models/user.model';
 import { ErrorHandlerService } from 'src/util/error-handler.service';
+import { EmailService } from 'src/helper/email-helper.service';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { ErrorHandlerService } from 'src/util/error-handler.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ErrorHandlerService],
+  providers: [AuthService, JwtStrategy, ErrorHandlerService, EmailService],
   exports: [AuthService],
 })
 export class AuthModule {}

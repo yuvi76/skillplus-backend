@@ -8,18 +8,18 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ timestamps: true })
 export class User {
   @Prop()
-  name: string;
+  username: string;
 
   @Prop()
   email: string;
 
-  @Prop()
+  @Prop({ select: false })
   password: string;
 
   @Prop()
   avatar: string;
 
-  @Prop()
+  @Prop({ default: ROLE.USER })
   role: ROLE;
 
   @Prop()
@@ -36,7 +36,7 @@ export const UserModel = SchemaFactory.createForClass(User);
 
 UserModel.pre('save', async function (next) {
   if (!this.avatar) {
-    this.avatar = `https://ui-avatars.com/api/?name=${this.name}&background=random`;
+    this.avatar = `https://ui-avatars.com/api/?name=${this.username}&background=random`;
   }
   if (this.isDirectModified('password') || this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);

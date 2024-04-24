@@ -12,6 +12,7 @@ import { User } from 'src/api/users/models/user.model';
 import ResponseDto from 'src/util/response.dto';
 import { ErrorHandlerService } from 'src/util/error-handler.service';
 import { MESSAGE } from 'src/constant/message';
+import { EmailService } from 'src/helper/email-helper.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
     private readonly errorHandlerService: ErrorHandlerService,
+    private readonly emailService: EmailService,
   ) {}
 
   async signup(signupRequestDto: SignupRequestDto): Promise<ResponseDto> {
@@ -32,11 +34,13 @@ export class AuthService {
         );
       }
 
+      const token = this.jwtService.sign({ email }, { expiresIn: '1h' });
+
+      const emailHtml = `Click <a href="http://localhost:3000/api/auth/verify-email/${token}">here</a> to verify your email`;
+      await this.emailService.sendEmail(email, 'Verify Email', emailHtml);
+
       const newUser = new this.userModel(signupRequestDto);
       await newUser.save();
-
-      const token = this.jwtService.sign({ email }, { expiresIn: '1h' });
-      // Implement logic to send email with verification token
 
       return {
         statusCode: HttpStatus.CREATED,
@@ -67,7 +71,12 @@ export class AuthService {
         );
       }
 
-      const payload = { email, sub: user._id };
+      const payload = {
+        email,
+        userId: user._id,
+        role: user.role,
+        username: user.username,
+      };
       const token = this.jwtService.sign(payload);
 
       return {
@@ -95,7 +104,9 @@ export class AuthService {
         { email },
         { resetPasswordToken: token },
       );
-      // Implement logic to send email with reset password token
+
+      const emailHtml = `Click <a href="http://localhost:3000/api/auth/resetpassword/${token}">here</a> to reset your password`;
+      await this.emailService.sendEmail(email, 'Reset Password', emailHtml);
 
       return {
         statusCode: HttpStatus.OK,

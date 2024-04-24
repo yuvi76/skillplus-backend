@@ -11,4 +11,5 @@ export const MESSAGE = {
   USER_VERIFIED_SUCCESS: 'User Verified Successfully',
   PASSWORD_RESET_SUCCESS: 'Password Reset Successfully',
   REFRESH_TOKEN_SUCCESS: 'Refresh Token Successfully',
+  USER_UPDATE_SUCCESS: 'User Updated Successfully',
 };
