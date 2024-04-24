@@ -155,14 +155,20 @@ export class AuthService {
   async verifyEmail(token: string): Promise<ResponseDto> {
     try {
       const decoded = this.jwtService.verify(token);
-      const user = await this.userModel.findOneAndUpdate(
-        { email: decoded.email },
-        { isVerified: true },
-        { new: true },
-      );
+      const user = await this.userModel.findOne({ email: decoded.email });
       if (!user) {
         throw new HttpException(MESSAGE.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
       }
+
+      if (user.isVerified) {
+        throw new HttpException(
+          MESSAGE.USER_ALREADY_VERIFIED,
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      user.isVerified = true;
+      await user.save();
 
       return {
         statusCode: HttpStatus.OK,

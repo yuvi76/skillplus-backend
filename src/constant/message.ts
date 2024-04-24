@@ -5,6 +5,7 @@ export const MESSAGE = {
   USER_NOT_VERIFIED: 'User Not Verified',
   INVALID_CREDENTIALS: 'Invalid Credentials',
   RESET_PASSWORD_TOKEN_SENT: 'Reset Password Token Sent',
+  USER_ALREADY_VERIFIED: 'User Already Verified',
   USER_SIGNUP_SUCCESS: 'User Signup Successfully',
   USER_LOGIN_SUCCESS: 'User Login Successfully',
   USER_VERIFIED_SUCCESS: 'User Verified Successfully',
