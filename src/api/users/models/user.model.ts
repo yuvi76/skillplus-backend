@@ -27,23 +27,19 @@ export class User {
 
   @Prop()
   courses: string[];
+
+  @Prop()
+  resetPasswordToken: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserModel = SchemaFactory.createForClass(User);
 
-UserSchema.pre('save', async function (next) {
+UserModel.pre('save', async function (next) {
   if (!this.avatar) {
     this.avatar = `https://ui-avatars.com/api/?name=${this.name}&background=random`;
   }
-  if (!this.isModified('password')) {
-    return next();
+  if (this.isDirectModified('password') || this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
-  this.password = await bcrypt.hashSync(this.password, 10);
   next();
 });
-
-UserSchema.methods.comparePassword = async function (
-  enteredPassword: string,
-): Promise<boolean> {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
