@@ -13,7 +13,7 @@ export class User {
   @Prop()
   email: string;
 
-  @Prop({ select: false })
+  @Prop()
   password: string;
 
   @Prop()
