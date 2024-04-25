@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './models/user.model';
-import ResponseDto from 'src/util/response.dto';
+import ResponseDto from '../../util/response.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ErrorHandlerService } from 'src/util/error-handler.service';
-import { MESSAGE } from 'src/constant/message';
+import { ErrorHandlerService } from '../../util/error-handler.service';
+import { MESSAGE } from '../../constant/message';
 
 @Injectable()
 export class UsersService {

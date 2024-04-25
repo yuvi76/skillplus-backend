@@ -4,7 +4,7 @@ import { SetMetadata } from '@nestjs/common';
 import { RolesGuard } from '../auth/guard/role.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import ResponseDto from 'src/util/response.dto';
+import ResponseDto from '../../util/response.dto';
 
 @Controller('users')
 export class UsersController {

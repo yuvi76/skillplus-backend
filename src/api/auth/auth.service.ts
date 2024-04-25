@@ -8,11 +8,11 @@ import { SignupRequestDto } from './dto/signup-request.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { ForgotPasswordRequestDto } from './dto/forgot-password-request.dto';
 import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
-import { User } from 'src/api/users/models/user.model';
-import ResponseDto from 'src/util/response.dto';
-import { ErrorHandlerService } from 'src/util/error-handler.service';
-import { MESSAGE } from 'src/constant/message';
-import { EmailService } from 'src/helper/email-helper.service';
+import { User } from '../../api/users/models/user.model';
+import ResponseDto from '../../util/response.dto';
+import { ErrorHandlerService } from '../../util/error-handler.service';
+import { MESSAGE } from '../../constant/message';
+import { EmailService } from '../../helper/email-helper.service';
 
 @Injectable()
 export class AuthService {

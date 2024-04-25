@@ -4,7 +4,7 @@ import { SignupRequestDto } from './dto/signup-request.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { ForgotPasswordRequestDto } from './dto/forgot-password-request.dto';
 import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
-import ResponseDto from 'src/util/response.dto';
+import ResponseDto from '../../util/response.dto';
 
 @Controller('auth')
 export class AuthController {

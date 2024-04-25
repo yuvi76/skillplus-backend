@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { User, UserModel } from './models/user.model';
-import { ErrorHandlerService } from 'src/util/error-handler.service';
+import { ErrorHandlerService } from '../../util/error-handler.service';
 
 @Module({
   imports: [

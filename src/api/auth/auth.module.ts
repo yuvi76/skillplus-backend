@@ -7,8 +7,8 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User, UserModel } from '../users/models/user.model';
-import { ErrorHandlerService } from 'src/util/error-handler.service';
-import { EmailService } from 'src/helper/email-helper.service';
+import { ErrorHandlerService } from '../../util/error-handler.service';
+import { EmailService } from '../../helper/email-helper.service';
 
 @Module({
   imports: [

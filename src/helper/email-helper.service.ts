@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { ErrorHandlerService } from 'src/util/error-handler.service';
+import { ErrorHandlerService } from '../util/error-handler.service';
 
 @Injectable()
 export class EmailService {
