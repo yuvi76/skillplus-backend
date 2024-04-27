@@ -1,12 +1,23 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignupRequestDto } from './dto/signup-request.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { ForgotPasswordRequestDto } from './dto/forgot-password-request.dto';
 import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
 import ResponseDto from '../../util/response.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -36,11 +47,11 @@ export class AuthController {
     return await this.authService.resetPassword(resetPasswordRequestDto);
   }
 
-  @Post('/refresh-token')
-  async refreshToken(
-    @Body() Body: { refreshToken: string },
-  ): Promise<ResponseDto> {
-    return await this.authService.refreshToken(Body.refreshToken);
+  @Get('/refresh-token')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  async refreshToken(@Req() req: any): Promise<ResponseDto> {
+    return await this.authService.refreshToken(req.user);
   }
 
   @Get('/verify-email/:token')

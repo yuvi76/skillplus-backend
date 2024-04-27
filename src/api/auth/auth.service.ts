@@ -36,7 +36,7 @@ export class AuthService {
 
       const token = this.jwtService.sign({ email }, { expiresIn: '1h' });
 
-      const emailHtml = `Click <a href="http://localhost:3000/api/auth/verify-email/${token}">here</a> to verify your email`;
+      const emailHtml = `Click <a href="http://localhost:3000/auth/verify-email/${token}">here</a> to verify your email`;
       await this.emailService.sendEmail(email, 'Verify Email', emailHtml);
 
       const newUser = new this.userModel(signupRequestDto);
@@ -105,7 +105,7 @@ export class AuthService {
         { resetPasswordToken: token },
       );
 
-      const emailHtml = `Click <a href="http://localhost:3000/api/auth/resetpassword/${token}">here</a> to reset your password`;
+      const emailHtml = `Click <a href="http://localhost:3000/auth/resetpassword/${token}">here</a> to reset your password`;
       await this.emailService.sendEmail(email, 'Reset Password', emailHtml);
 
       return {
@@ -146,11 +146,13 @@ export class AuthService {
     }
   }
 
-  async refreshToken(token: string): Promise<ResponseDto> {
+  async refreshToken(user: User): Promise<ResponseDto> {
     try {
-      const decoded = this.jwtService.verify(token);
-      console.log(decoded);
-      const payload = { email: decoded.email, sub: decoded.sub };
+      const currentUser = await this.userModel.findOne({ email: user.email });
+      if (!currentUser) {
+        throw new HttpException(MESSAGE.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      }
+      const payload = { email: currentUser.email, sub: currentUser._id };
       const newToken = this.jwtService.sign(payload);
 
       return {

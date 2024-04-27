@@ -52,7 +52,6 @@ export class CourseService {
         tags,
         sort,
         order,
-        price,
       } = getCourseListDto;
 
       // Match stage to apply filters
@@ -64,16 +63,13 @@ export class CourseService {
         matchStage['category'] = category;
       }
       if (instructor) {
-        matchStage['instructor'] = instructor;
+        matchStage['instructor'] = { $regex: instructor, $options: 'i' };
       }
       if (language) {
         matchStage['language'] = language;
       }
       if (tags) {
         matchStage['tags'] = { $in: tags };
-      }
-      if (price) {
-        matchStage['price'] = price;
       }
 
       const sortStage = {};
@@ -83,17 +79,27 @@ export class CourseService {
       const limitStage = { $limit: limit };
 
       const pipeline: any = [
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'instructor',
+            foreignField: '_id',
+            as: 'instructor',
+          },
+        },
+        { $unwind: '$instructor' },
+        { $addFields: { instructor: '$instructor.username' } },
         { $match: matchStage },
         {
           $facet: {
-            courses: [sortStage, skipStage, limitStage],
+            courses: [skipStage, limitStage],
             totalCount: [{ $count: 'count' }],
           },
         },
       ];
 
-      const results = await this.courseModel.aggregate(pipeline);
-      const { courses, totalCount } = results[0];
+      const [results] = await this.courseModel.aggregate(pipeline);
+      const { courses, totalCount } = results;
       const totalCourses = totalCount[0] ? totalCount[0].count : 0;
       const totalPages = Math.ceil(totalCourses / limit);
 
@@ -102,7 +108,7 @@ export class CourseService {
         message: MESSAGE.COURSE_LIST_FETCHED_SUCCESS,
         data: {
           courses,
-          totalCourses: totalCourses[0]?.totalCourses || 0,
+          totalCourses: totalCourses,
           totalPages,
         },
       };
@@ -202,14 +208,16 @@ export class CourseService {
           message: MESSAGE.USER_NOT_FOUND,
         };
       }
-      if (course.students.includes(userId)) {
+      if (course.students.includes(userId) && user.courses.includes(courseId)) {
         return {
           statusCode: HttpStatus.CONFLICT,
           message: MESSAGE.COURSE_ALREADY_ENROLLED,
         };
       }
       course.students.push(userId);
+      user.courses.push(courseId);
       await course.save();
+      await user.save();
       return {
         statusCode: HttpStatus.OK,
         message: MESSAGE.COURSE_ENROLLED_SUCCESS,

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { ROLE } from '../../../enum/role.enum';
 import * as bcrypt from 'bcrypt';
 
@@ -25,7 +25,7 @@ export class User {
   @Prop()
   isVerified: boolean;
 
-  @Prop()
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Course' })
   courses: string[];
 
   @Prop()

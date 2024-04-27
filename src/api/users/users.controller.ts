@@ -7,6 +7,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { SetMetadata } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,12 +17,14 @@ import { UsersService } from './users.service';
 import ResponseDto from '../../util/response.dto';
 
 @Controller('users')
+@ApiTags('Users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Put('update')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @SetMetadata('roles', ['user'])
+  @ApiBearerAuth()
   async updateUser(
     @Body() updateUserDto: UpdateUserDto,
     @Req() req: any,
@@ -33,6 +36,19 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @SetMetadata('roles', ['user'])
   @UseInterceptors(FileInterceptor('file'))
+  @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async updateProfileImage(
     @UploadedFile() file: any,
     @Req() req: any,

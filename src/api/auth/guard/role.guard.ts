@@ -27,7 +27,10 @@ export class RolesGuard implements CanActivate {
     if (user && user.role && hasRole()) {
       return true;
     } else {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'You do not have permission to perform this action',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 }

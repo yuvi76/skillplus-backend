@@ -28,16 +28,12 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
   ): Promise<ResponseDto> {
     try {
-      const user = await this.userModel.findByIdAndUpdate(
-        userId,
-        updateUserDto,
-        { new: true },
-      );
+      const user = await this.userModel
+        .findByIdAndUpdate(userId, updateUserDto, { new: true })
+        .select({ password: 0 });
       if (!user) {
         throw new HttpException(MESSAGE.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
       }
-
-      delete user.password;
 
       return {
         statusCode: HttpStatus.OK,
@@ -65,13 +61,9 @@ export class UsersService {
       const result = await cloudinary.v2.uploader.upload(dataUrl, {
         folder: 'avatar',
       });
-      const updatedUser = await this.userModel.findByIdAndUpdate(
-        userId,
-        { avatar: result.secure_url },
-        { new: true },
-      );
-
-      delete updatedUser.password;
+      const updatedUser = await this.userModel
+        .findByIdAndUpdate(userId, { avatar: result.secure_url }, { new: true })
+        .select({ password: 0 });
 
       return {
         statusCode: HttpStatus.OK,

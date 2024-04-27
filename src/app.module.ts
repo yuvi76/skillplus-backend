@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './api/users/users.module';
 import { AuthModule } from './api/auth/auth.module';
@@ -27,7 +25,5 @@ import { CourseModule } from './api/course/course.module';
     AuthModule,
     CourseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

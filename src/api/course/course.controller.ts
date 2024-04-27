@@ -10,6 +10,7 @@ import {
   Req,
   SetMetadata,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -20,19 +21,21 @@ import { ROLE } from '../../enum/role.enum';
 import ResponseDto from '../../util/response.dto';
 
 @Controller('courses')
+@ApiTags('Courses')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @SetMetadata('roles', [ROLE.INSTRUCTOR])
+  @ApiBearerAuth()
   async createCourse(
     @Body() createCourseDto: CreateCourseDto,
   ): Promise<ResponseDto> {
     return this.courseService.create(createCourseDto);
   }
 
-  @Post()
+  @Post('/list')
   async getCourses(
     @Body() getCourseListDto: GetCourseListDto,
   ): Promise<ResponseDto> {
@@ -47,6 +50,7 @@ export class CourseController {
   @Put(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @SetMetadata('roles', [ROLE.INSTRUCTOR])
+  @ApiBearerAuth()
   async updateCourse(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,
@@ -57,17 +61,19 @@ export class CourseController {
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @SetMetadata('roles', [ROLE.ADMIN, ROLE.INSTRUCTOR])
+  @ApiBearerAuth()
   async deleteCourse(@Param('id') id: string): Promise<ResponseDto> {
     return this.courseService.remove(id);
   }
 
   @Post(':id/enroll')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   async enrollInCourse(
     @Req() req: any,
     @Param('id') courseId: string,
   ): Promise<ResponseDto> {
-    return this.courseService.enroll(req.user.id, courseId);
+    return this.courseService.enroll(req.user.userId, courseId);
   }
 
   // @Post(':id/review')
