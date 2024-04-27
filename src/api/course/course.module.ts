@@ -1,0 +1,20 @@
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
+import { CourseService } from './course.service';
+import { CourseController } from './course.controller';
+import { Course, CourseModel } from './models/course.model';
+import { User, UserModel } from '../users/models/user.model';
+import { ErrorHandlerService } from '../../util/error-handler.service';
+
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: Course.name, schema: CourseModel },
+      { name: User.name, schema: UserModel },
+    ]),
+  ],
+  controllers: [CourseController],
+  providers: [CourseService, JwtService, ErrorHandlerService],
+})
+export class CourseModule {}

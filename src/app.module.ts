@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './api/users/users.module';
 import { AuthModule } from './api/auth/auth.module';
+import { CourseModule } from './api/course/course.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './api/auth/auth.module';
     CacheModule.register({ isGlobal: true }),
     UsersModule,
     AuthModule,
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
