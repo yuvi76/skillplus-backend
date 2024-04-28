@@ -9,8 +9,10 @@ import {
   UseGuards,
   Req,
   SetMetadata,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -36,6 +38,7 @@ export class CourseController {
   }
 
   @Post('/list')
+  @UseInterceptors(CacheInterceptor)
   async getCourses(
     @Body() getCourseListDto: GetCourseListDto,
   ): Promise<ResponseDto> {

@@ -1,6 +1,8 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { Course } from './models/course.model';
 import { User } from '../users/models/user.model';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -13,6 +15,7 @@ import { MESSAGE } from '../../constant/message';
 @Injectable()
 export class CourseService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly errorHandlerService: ErrorHandlerService,
@@ -119,18 +122,29 @@ export class CourseService {
 
   async findById(id: string): Promise<ResponseDto> {
     try {
-      const course = await this.courseModel.findById(id);
-      if (!course) {
+      const isCacheAvailable = await this.cacheManager.get(id);
+      if (isCacheAvailable) {
         return {
-          statusCode: HttpStatus.NOT_FOUND,
-          message: MESSAGE.COURSE_NOT_FOUND,
+          statusCode: HttpStatus.OK,
+          message: MESSAGE.COURSE_DETAILS_FETCHED_SUCCESS,
+          data: isCacheAvailable,
+        };
+      } else {
+        const course = await this.courseModel.findById(id);
+        if (!course) {
+          return {
+            statusCode: HttpStatus.NOT_FOUND,
+            message: MESSAGE.COURSE_NOT_FOUND,
+          };
+        }
+        await this.cacheManager.set(id, course, 60);
+
+        return {
+          statusCode: HttpStatus.OK,
+          message: MESSAGE.COURSE_DETAILS_FETCHED_SUCCESS,
+          data: course,
         };
       }
-      return {
-        statusCode: HttpStatus.OK,
-        message: MESSAGE.COURSE_DETAILS_FETCHED_SUCCESS,
-        data: course,
-      };
     } catch (error) {
       await this.errorHandlerService.HttpException(error);
     }
