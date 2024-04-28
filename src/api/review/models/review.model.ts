@@ -3,18 +3,13 @@ import mongoose, { HydratedDocument } from 'mongoose';
 
 export type ReviewDocument = HydratedDocument<Review>;
 
-export interface IComment {
-  comment: string;
-  user: string;
-}
-
 @Schema({ timestamps: true })
 export class Review {
   @Prop({ type: Number, min: 1, max: 5 })
   rating: number;
 
   @Prop()
-  comment: string;
+  review: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: string;
@@ -23,7 +18,10 @@ export class Review {
   course: string;
 
   @Prop()
-  commentReplies: IComment[];
+  reply: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  repliedBy: string;
 }
 
 export const ReviewModel = SchemaFactory.createForClass(Review);

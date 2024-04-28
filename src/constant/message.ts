@@ -1,4 +1,5 @@
 export const MESSAGE = {
+  UNAUTHORIZED: 'You are not authorized to access this resource.',
   USER_NOT_FOUND: 'User Not Found.',
   INVALID_TOKEN: 'Invalid Token.',
   USER_ALREADY_EXISTS: 'User Already Exists.',
@@ -21,4 +22,11 @@ export const MESSAGE = {
   COURSE_DELETED_SUCCESS: 'Course Deleted Successfully.',
   COURSE_ENROLLED_SUCCESS: 'Course Enrolled Successfully.',
   COURSE_ALREADY_ENROLLED: 'Course Already Enrolled.',
+  REVIEW_ALREADY_EXISTS: 'Review Already Exists.',
+  REVIEW_NOT_FOUND: 'Review Not Found.',
+  REVIEW_CREATED_SUCCESS: 'Review Created Successfully.',
+  REVIEW_FETCHED_SUCCESS: 'Review Fetched Successfully.',
+  REVIEW_UPDATED_SUCCESS: 'Review Updated Successfully.',
+  REVIEW_DELETED_SUCCESS: 'Review Deleted Successfully.',
+  REVIEW_REPLIED_SUCCESS: 'Review Replied Successfully.',
 };

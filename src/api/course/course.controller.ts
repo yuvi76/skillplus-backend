@@ -32,8 +32,10 @@ export class CourseController {
   @SetMetadata('roles', [ROLE.INSTRUCTOR])
   @ApiBearerAuth()
   async createCourse(
+    @Req() req: any,
     @Body() createCourseDto: CreateCourseDto,
   ): Promise<ResponseDto> {
+    createCourseDto.instructor = req.user.userId;
     return this.courseService.create(createCourseDto);
   }
 

@@ -42,8 +42,7 @@ export class CreateCourseDto {
   @IsString()
   thumbnail: string;
 
-  @ApiProperty({ example: '662cc5142dc0400287955c17' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   instructor: string;
 
