@@ -49,6 +49,9 @@ export class ReviewService {
       }
       const createdReview = new this.reviewModel(createReviewDto);
       courseDetail.reviews.push(createdReview._id.toString());
+      courseDetail.ratings =
+        (courseDetail.ratings + createReviewDto.rating) /
+        courseDetail.reviews.length;
       await courseDetail.save();
       await createdReview.save();
       return {
@@ -131,6 +134,22 @@ export class ReviewService {
           statusCode: HttpStatus.NOT_FOUND,
           message: MESSAGE.REVIEW_NOT_FOUND,
         };
+      }
+      if (updateReviewDto.rating) {
+        const reviews = await this.reviewModel.find({
+          course: updatedReview.course,
+        });
+        const totalRating = reviews.reduce(
+          (sum, review) => sum + review.rating,
+          0,
+        );
+        const averageRating = totalRating / reviews.length;
+
+        await this.courseModel
+          .findByIdAndUpdate(updatedReview.course, {
+            $set: { ratings: averageRating },
+          })
+          .exec();
       }
       return {
         statusCode: HttpStatus.OK,
