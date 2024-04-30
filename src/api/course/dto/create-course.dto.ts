@@ -51,11 +51,6 @@ export class CreateCourseDto {
   @IsArray()
   category: string[];
 
-  @ApiProperty({ example: ['662cc5142dc0400287955c6b'] })
-  @IsOptional()
-  @IsArray()
-  lessons: string[];
-
   @ApiProperty({ example: ['tag1', 'tag2'] })
   @IsOptional()
   @IsArray()

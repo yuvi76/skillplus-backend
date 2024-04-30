@@ -1,4 +1,5 @@
 export const MESSAGE = {
+  /* Common Messages */
   UNAUTHORIZED: 'You are not authorized to access this resource.',
   USER_NOT_FOUND: 'User Not Found.',
   INVALID_TOKEN: 'Invalid Token.',
@@ -13,6 +14,7 @@ export const MESSAGE = {
   PASSWORD_RESET_SUCCESS: 'Password Reset Successfully.',
   REFRESH_TOKEN_SUCCESS: 'Refresh Token Successfully.',
   USER_UPDATE_SUCCESS: 'User Updated Successfully.',
+  /* Content Messages */
   COURSE_ALREADY_EXISTS: 'Course Already Exists.',
   COURSE_NOT_FOUND: 'Course Not Found.',
   COURSE_CREATED_SUCCESS: 'Course Created Successfully.',
@@ -22,6 +24,7 @@ export const MESSAGE = {
   COURSE_DELETED_SUCCESS: 'Course Deleted Successfully.',
   COURSE_ENROLLED_SUCCESS: 'Course Enrolled Successfully.',
   COURSE_ALREADY_ENROLLED: 'Course Already Enrolled.',
+  /* Review Messages */
   REVIEW_ALREADY_EXISTS: 'Review Already Exists.',
   REVIEW_NOT_FOUND: 'Review Not Found.',
   REVIEW_CREATED_SUCCESS: 'Review Created Successfully.',
@@ -29,4 +32,10 @@ export const MESSAGE = {
   REVIEW_UPDATED_SUCCESS: 'Review Updated Successfully.',
   REVIEW_DELETED_SUCCESS: 'Review Deleted Successfully.',
   REVIEW_REPLIED_SUCCESS: 'Review Replied Successfully.',
+  /* Content Messages */
+  CONTENT_ALREADY_EXISTS: 'Content Already Exists.',
+  CONTENT_NOT_FOUND: 'Content Not Found.',
+  CONTENT_CREATED_SUCCESS: 'Content Created Successfully.',
+  CONTENT_UPDATED_SUCCESS: 'Content Updated Successfully.',
+  CONTENT_DELETED_SUCCESS: 'Content Deleted Successfully.',
 };

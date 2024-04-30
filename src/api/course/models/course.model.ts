@@ -35,8 +35,8 @@ export class Course {
   @Prop()
   category: string[];
 
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Lesson' })
-  lessons: string[];
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Content' })
+  content: string[];
 
   @Prop()
   tags: string[]; // Array of tags for Search functionality
