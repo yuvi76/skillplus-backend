@@ -38,4 +38,10 @@ export const MESSAGE = {
   CONTENT_CREATED_SUCCESS: 'Content Created Successfully.',
   CONTENT_UPDATED_SUCCESS: 'Content Updated Successfully.',
   CONTENT_DELETED_SUCCESS: 'Content Deleted Successfully.',
+  /* Lecture Messages */
+  LECTURE_ALREADY_EXISTS: 'Lecture Already Exists.',
+  LECTURE_NOT_FOUND: 'Lecture Not Found.',
+  LECTURE_CREATED_SUCCESS: 'Lecture Created Successfully.',
+  LECTURE_UPDATED_SUCCESS: 'Lecture Updated Successfully.',
+  LECTURE_DELETED_SUCCESS: 'Lecture Deleted Successfully.',
 };

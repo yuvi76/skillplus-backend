@@ -5,6 +5,7 @@ import { CourseService } from './course.service';
 import { CourseController } from './course.controller';
 import { Course, CourseModel } from './models/course.model';
 import { User, UserModel } from '../users/models/user.model';
+import { Content, ContentModel } from '../content/models/content.model';
 import { ErrorHandlerService } from '../../util/error-handler.service';
 
 @Module({
@@ -12,6 +13,7 @@ import { ErrorHandlerService } from '../../util/error-handler.service';
     MongooseModule.forFeature([
       { name: Course.name, schema: CourseModel },
       { name: User.name, schema: UserModel },
+      { name: Content.name, schema: ContentModel },
     ]),
   ],
   controllers: [CourseController],

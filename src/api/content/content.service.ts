@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Content } from './models/content.model';
 import { Course } from '../course/models/course.model';
-import { User } from '../users/models/user.model';
+import { Lecture } from '../lecture/models/lecture.model';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 import { ErrorHandlerService } from '../../util/error-handler.service';
@@ -15,7 +15,7 @@ export class ContentService {
   constructor(
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Lecture.name) private readonly lectureModel: Model<Lecture>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
@@ -92,6 +92,8 @@ export class ContentService {
       const course = await this.courseModel.findById(content.course);
       course.content = course.content.filter((item) => item.toString() !== id);
       await course.save();
+
+      await this.lectureModel.deleteMany({ content: id });
 
       return {
         statusCode: HttpStatus.OK,

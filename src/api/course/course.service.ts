@@ -5,6 +5,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Course } from './models/course.model';
 import { User } from '../users/models/user.model';
+import { Content } from '../content/models/content.model';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { GetCourseListDto } from './dto/get-course-list.dto';
@@ -18,6 +19,7 @@ export class CourseService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Content.name) private readonly contentModel: Model<Content>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
@@ -197,6 +199,13 @@ export class CourseService {
           message: MESSAGE.COURSE_NOT_FOUND,
         };
       }
+      await this.userModel.updateMany(
+        { courses: id },
+        { $pull: { courses: id } },
+      );
+      await this.contentModel.deleteMany({ course: id });
+      await this.cacheManager.del(id);
+
       return {
         statusCode: HttpStatus.OK,
         message: MESSAGE.COURSE_DELETED_SUCCESS,
@@ -240,15 +249,6 @@ export class CourseService {
       await this.errorHandlerService.HttpException(error);
     }
   }
-
-  // async addReview(
-  //   courseId: string,
-  //   userId: string,
-  //   reviewDto: any,
-  // ): Promise<ResponseDto> {
-  //   // Implement adding a review
-  //   return { statusCode: 200, message: 'Review added successfully' };
-  // }
 
   // async updateProgress(
   //   courseId: string,
