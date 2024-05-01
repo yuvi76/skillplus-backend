@@ -8,6 +8,7 @@ import { CourseModule } from './api/course/course.module';
 import { ReviewModule } from './api/review/review.module';
 import { ContentModule } from './api/content/content.module';
 import { LectureModule } from './api/lecture/lecture.module';
+import { ProgressModule } from './api/progress/progress.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LectureModule } from './api/lecture/lecture.module';
     ReviewModule,
     ContentModule,
     LectureModule,
+    ProgressModule,
   ],
 })
 export class AppModule {}

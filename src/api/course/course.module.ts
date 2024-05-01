@@ -6,6 +6,7 @@ import { CourseController } from './course.controller';
 import { Course, CourseModel } from './models/course.model';
 import { User, UserModel } from '../users/models/user.model';
 import { Content, ContentModel } from '../content/models/content.model';
+import { Progress, ProgressModel } from '../progress/models/progress.model';
 import { ErrorHandlerService } from '../../util/error-handler.service';
 
 @Module({
@@ -14,6 +15,7 @@ import { ErrorHandlerService } from '../../util/error-handler.service';
       { name: Course.name, schema: CourseModel },
       { name: User.name, schema: UserModel },
       { name: Content.name, schema: ContentModel },
+      { name: Progress.name, schema: ProgressModel },
     ]),
   ],
   controllers: [CourseController],

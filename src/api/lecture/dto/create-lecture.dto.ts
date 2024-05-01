@@ -29,7 +29,7 @@ export class CreateLectureDto {
   @IsNumber()
   order: number;
 
-  @ApiProperty({ example: ['https://www.youtube.com/watch?v=8zKuNo4ay8E'] })
+  @ApiProperty({ example: 'https://www.youtube.com/watch?v=8zKuNo4ay8E' })
   @IsNotEmpty()
   @IsString()
   videoUrl: string;

@@ -71,7 +71,6 @@ export class UsersService {
         data: updatedUser,
       };
     } catch (error) {
-      console.log(error);
       await this.errorHandlerService.HttpException(error);
     }
   }

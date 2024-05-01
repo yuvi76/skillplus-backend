@@ -6,6 +6,7 @@ import { Cache } from 'cache-manager';
 import { Course } from './models/course.model';
 import { User } from '../users/models/user.model';
 import { Content } from '../content/models/content.model';
+import { Progress } from '../progress/models/progress.model';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { GetCourseListDto } from './dto/get-course-list.dto';
@@ -20,6 +21,7 @@ export class CourseService {
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
+    @InjectModel(Progress.name) private readonly progressModel: Model<Progress>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
@@ -217,7 +219,12 @@ export class CourseService {
 
   async enroll(userId: string, courseId: string): Promise<ResponseDto> {
     try {
-      const course = await this.courseModel.findById(courseId);
+      const course = await this.courseModel.findById(courseId).populate({
+        path: 'content',
+        populate: {
+          path: 'lectures',
+        },
+      });
       if (!course) {
         return {
           statusCode: HttpStatus.NOT_FOUND,
@@ -239,8 +246,21 @@ export class CourseService {
       }
       course.students.push(userId);
       user.courses.push(courseId);
+
+      const Progress = new this.progressModel({
+        user: userId,
+        course: courseId,
+        contentsProgress: course.content.map((content: any) => ({
+          content: content._id,
+          lecturesProgress: content.lectures.map((lecture: any) => ({
+            lecture: lecture._id,
+            completed: false,
+          })),
+        })),
+      });
       await course.save();
       await user.save();
+      await Progress.save();
       return {
         statusCode: HttpStatus.OK,
         message: MESSAGE.COURSE_ENROLLED_SUCCESS,
