@@ -37,7 +37,11 @@ export class OrderService {
           message: MESSAGE.COURSE_NOT_FOUND,
         };
       }
-      const order = await this.orderModel.findOne({ user, course });
+      const order = await this.orderModel.findOne({
+        user,
+        course,
+        status: 'completed',
+      });
       if (order) {
         return {
           statusCode: HttpStatus.CONFLICT,
@@ -77,6 +81,9 @@ export class OrderService {
         success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `http://localhost:3000/cancel`,
         customer_email: userData.email,
+        metadata: {
+          course,
+        },
       });
 
       await this.orderModel.create({
@@ -118,6 +125,9 @@ export class OrderService {
           { transactionId: session.id },
           { status: 'completed' },
         );
+        await this.courseModel.findByIdAndUpdate(session.metadata.course, {
+          $inc: { totalSales: 1 },
+        });
         break;
       case 'checkout.session.async_payment_failed':
         const failedSession = body.data.object;
