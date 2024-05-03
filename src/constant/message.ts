@@ -50,4 +50,5 @@ export const MESSAGE = {
   ORDER_NOT_FOUND: 'Order Not Found.',
   ORDER_CREATED_SUCCESS: 'Order Created Successfully.',
   ORDER_FETCHED_SUCCESS: 'Order Fetched Successfully.',
+  COURSE_ALREADY_PURCHASED: 'Course Already Purchased.',
 };

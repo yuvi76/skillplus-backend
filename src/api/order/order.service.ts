@@ -37,6 +37,27 @@ export class OrderService {
           message: MESSAGE.COURSE_NOT_FOUND,
         };
       }
+      const order = await this.orderModel.findOne({ user, course });
+      if (order) {
+        return {
+          statusCode: HttpStatus.CONFLICT,
+          message: MESSAGE.COURSE_ALREADY_PURCHASED,
+        };
+      }
+      if (courseData.price === 0) {
+        await this.orderModel.create({
+          user: user,
+          course: course,
+          amount: courseData.price,
+          status: 'completed',
+          transactionId: 'free',
+        });
+        return {
+          statusCode: HttpStatus.CREATED,
+          message: MESSAGE.ORDER_CREATED_SUCCESS,
+          data: 'free',
+        };
+      }
       const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
