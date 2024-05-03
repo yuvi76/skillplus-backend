@@ -52,6 +52,9 @@ export class Course {
 
   @Prop({ default: true })
   isFree: boolean;
+
+  @Prop({ default: 0 })
+  totalSales: number;
 }
 
 export const CourseModel = SchemaFactory.createForClass(Course);

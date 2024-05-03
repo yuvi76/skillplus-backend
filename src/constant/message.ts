@@ -46,4 +46,8 @@ export const MESSAGE = {
   LECTURE_DELETED_SUCCESS: 'Lecture Deleted Successfully.',
   /* Progress Messages */
   PROGRESS_UPDATED_SUCCESS: 'Progress Updated Successfully.',
+  /* Order Messages */
+  ORDER_NOT_FOUND: 'Order Not Found.',
+  ORDER_CREATED_SUCCESS: 'Order Created Successfully.',
+  ORDER_FETCHED_SUCCESS: 'Order Fetched Successfully.',
 };
