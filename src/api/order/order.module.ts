@@ -6,6 +6,10 @@ import { OrderController } from './order.controller';
 import { Order, OrderModel } from './models/order.model';
 import { User, UserModel } from '../users/models/user.model';
 import { Course, CourseModel } from '../course/models/course.model';
+import {
+  Notification,
+  NotificationModel,
+} from '../notification/model/notification.model';
 import { ErrorHandlerService } from '../../util/error-handler.service';
 
 @Module({
@@ -14,6 +18,7 @@ import { ErrorHandlerService } from '../../util/error-handler.service';
       { name: Order.name, schema: OrderModel },
       { name: User.name, schema: UserModel },
       { name: Course.name, schema: CourseModel },
+      { name: Notification.name, schema: NotificationModel },
     ]),
   ],
   controllers: [OrderController],

@@ -51,4 +51,7 @@ export const MESSAGE = {
   ORDER_CREATED_SUCCESS: 'Order Created Successfully.',
   ORDER_FETCHED_SUCCESS: 'Order Fetched Successfully.',
   COURSE_ALREADY_PURCHASED: 'Course Already Purchased.',
+  /* Notification Messages */
+  NOTIFICATION_FETCHED_SUCCESS: 'Notification Fetched Successfully.',
+  NOTIFICATION_MARKED_AS_READ: 'Notification Marked As Read.',
 };

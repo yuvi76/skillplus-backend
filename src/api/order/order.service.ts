@@ -6,6 +6,7 @@ import Stripe from 'stripe';
 import { Order, OrderDocument } from './models/order.model';
 import { Course, CourseDocument } from '../course/models/course.model';
 import { User, UserDocument } from '../users/models/user.model';
+import { Notification } from '../notification/model/notification.model';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ErrorHandlerService } from '../../util/error-handler.service';
 import ResponseDto from '../../util/response.dto';
@@ -18,6 +19,8 @@ export class OrderService {
     @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Notification.name)
+    private notificationModel: Model<Notification>,
     private readonly configService: ConfigService,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {
@@ -121,12 +124,19 @@ export class OrderService {
     switch (body.type) {
       case 'checkout.session.completed':
         const session = body.data.object;
-        await this.orderModel.findOneAndUpdate(
+        const orderData = await this.orderModel.findOneAndUpdate(
           { transactionId: session.id },
           { status: 'completed' },
+          { new: true },
         );
         await this.courseModel.findByIdAndUpdate(session.metadata.course, {
           $inc: { totalSales: 1 },
+        });
+        await this.notificationModel.create({
+          user: orderData.user,
+          title: 'Course Purchase',
+          description: `You have successfully purchased the course.`,
+          type: 'order',
         });
         break;
       case 'checkout.session.async_payment_failed':

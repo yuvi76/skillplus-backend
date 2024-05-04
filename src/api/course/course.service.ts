@@ -7,6 +7,7 @@ import { Course } from './models/course.model';
 import { User } from '../users/models/user.model';
 import { Content } from '../content/models/content.model';
 import { Progress } from '../progress/models/progress.model';
+import { Notification } from '../notification/model/notification.model';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { GetCourseListDto } from './dto/get-course-list.dto';
@@ -22,6 +23,8 @@ export class CourseService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
     @InjectModel(Progress.name) private readonly progressModel: Model<Progress>,
+    @InjectModel(Notification.name)
+    private readonly notificationModel: Model<Notification>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
@@ -258,9 +261,17 @@ export class CourseService {
           })),
         })),
       });
+
+      const notification = new this.notificationModel({
+        user: course.instructor,
+        title: 'New Course Enrollment',
+        description: `${user.username} enrolled in your course ${course.title}`,
+        type: 'course',
+      });
       await course.save();
       await user.save();
       await Progress.save();
+      await notification.save();
       return {
         statusCode: HttpStatus.OK,
         message: MESSAGE.COURSE_ENROLLED_SUCCESS,
@@ -269,13 +280,4 @@ export class CourseService {
       await this.errorHandlerService.HttpException(error);
     }
   }
-
-  // async updateProgress(
-  //   courseId: string,
-  //   userId: string,
-  //   progressDto: any,
-  // ): Promise<ResponseDto> {
-  //   // Implement updating course progress
-  //   return { statusCode: 200, message: 'Progress updated successfully' };
-  // }
 }

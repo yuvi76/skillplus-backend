@@ -10,6 +10,7 @@ import { ContentModule } from './api/content/content.module';
 import { LectureModule } from './api/lecture/lecture.module';
 import { ProgressModule } from './api/progress/progress.module';
 import { OrderModule } from './api/order/order.module';
+import { NotificationModule } from './api/notification/notification.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { OrderModule } from './api/order/order.module';
     LectureModule,
     ProgressModule,
     OrderModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}
