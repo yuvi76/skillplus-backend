@@ -26,7 +26,11 @@ async function bootstrap() {
     ],
   });
   const configService = app.get(ConfigService);
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*',
+    methods: '*',
+  });
   app.use(helmet());
   // app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
