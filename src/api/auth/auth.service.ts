@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -20,6 +21,7 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
     private readonly errorHandlerService: ErrorHandlerService,
+    private readonly configService: ConfigService,
     private readonly emailService: EmailService,
   ) {}
 
@@ -36,7 +38,10 @@ export class AuthService {
 
       const token = this.jwtService.sign({ email }, { expiresIn: '1h' });
 
-      const emailHtml = `Click <a href="http://localhost:3000/auth/verify-email/${token}">here</a> to verify your email`;
+      const emailVerificationUrl = `${this.configService.get(
+        'FRONTEND_URL',
+      )}/verify-email/${token}`;
+      const emailHtml = `Click <a href="${emailVerificationUrl}">here</a> to verify your email`;
       await this.emailService.sendEmail(email, 'Verify Email', emailHtml);
 
       const newUser = new this.userModel(signupRequestDto);
@@ -105,7 +110,10 @@ export class AuthService {
         { resetPasswordToken: token },
       );
 
-      const emailHtml = `Click <a href="http://localhost:3000/auth/resetpassword/${token}">here</a> to reset your password`;
+      const resetPasswordUrl = `${this.configService.get(
+        'FRONTEND_URL',
+      )}/reset-password/${token}`;
+      const emailHtml = `Click <a href="${resetPasswordUrl}">here</a> to reset your password`;
       await this.emailService.sendEmail(email, 'Reset Password', emailHtml);
 
       return {
