@@ -81,13 +81,14 @@ export class AuthService {
         userId: user._id,
         role: user.role,
         username: user.username,
+        userAvatar: user.avatar,
       };
       const token = this.jwtService.sign(payload);
 
       return {
         statusCode: HttpStatus.OK,
         message: MESSAGE.USER_LOGIN_SUCCESS,
-        data: { token },
+        data: { token, user: payload },
       };
     } catch (error) {
       await this.errorHandlerService.HttpException(error);
