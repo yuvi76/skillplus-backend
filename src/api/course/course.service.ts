@@ -165,6 +165,7 @@ export class CourseService {
       if (updateCourseDto.title) {
         const course = await this.courseModel.findOne({
           title: updateCourseDto.title,
+          _id: { $ne: id },
         });
         if (course) {
           return {
