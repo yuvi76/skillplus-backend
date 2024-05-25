@@ -16,6 +16,8 @@ export const MESSAGE = {
   USER_UPDATE_SUCCESS: 'User Updated Successfully.',
   USER_FETCH_SUCCESS: 'User Fetched Successfully.',
   INSTRUCTOR_FETCH_SUCCESS: 'Instructor Fetched Successfully.',
+  INVALID_INPUT: 'Invalid Input.',
+  TOKEN_EXPIRED: 'Token Expired.',
   /* Content Messages */
   COURSE_ALREADY_EXISTS: 'Course Already Exists.',
   COURSE_NOT_FOUND: 'Course Not Found.',
@@ -26,6 +28,7 @@ export const MESSAGE = {
   COURSE_DELETED_SUCCESS: 'Course Deleted Successfully.',
   COURSE_ENROLLED_SUCCESS: 'Course Enrolled Successfully.',
   COURSE_ALREADY_ENROLLED: 'Course Already Enrolled.',
+  COURSE_CREATION_FAILED: 'Course Creation Failed.',
   /* Review Messages */
   REVIEW_ALREADY_EXISTS: 'Review Already Exists.',
   REVIEW_NOT_FOUND: 'Review Not Found.',
