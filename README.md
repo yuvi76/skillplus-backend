@@ -1,5 +1,7 @@
 # SkillPlus
 
+<img src="Logo.png" alt="Logo" width="200" height="200"/>
+
 SkillPlus is a Learning Management System (LMS) designed to provide a robust platform for managing educational courses, tracking progress, and enhancing the learning experience. It is built with Nest.js and MongoDB, and it offers a RESTful API for easy integration with other services.
 
 ## Features 
