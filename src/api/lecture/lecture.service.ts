@@ -1,6 +1,7 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as cloudinary from 'cloudinary';
 import { Content } from '../content/models/content.model';
 import { Lecture } from './models/lecture.model';
 import { CreateLectureDto } from './dto/create-lecture.dto';
@@ -17,7 +18,10 @@ export class LectureService {
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
-  async create(createLectureDto: CreateLectureDto): Promise<ResponseDto> {
+  async create(
+    createLectureDto: CreateLectureDto,
+    file: any,
+  ): Promise<ResponseDto> {
     try {
       const { title, content } = createLectureDto;
       const contentDetail = await this.contentModel.findOne({
@@ -36,6 +40,21 @@ export class LectureService {
           message: MESSAGE.LECTURE_ALREADY_EXISTS,
         };
       }
+
+      const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString(
+        'base64',
+      )}`;
+
+      const { secure_url } = await cloudinary.v2.uploader.upload(dataUrl, {
+        resource_type: 'video',
+        public_id: `video/${title}`,
+        overwrite: true,
+        format: 'mp4',
+        folder: 'video',
+      });
+
+      createLectureDto.videoUrl = secure_url;
+
       const createdLecture = new this.lectureModel(createLectureDto);
       await createdLecture.save();
       contentDetail.lectures.push(createdLecture._id.toString());

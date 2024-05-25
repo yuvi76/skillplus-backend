@@ -14,6 +14,8 @@ export const MESSAGE = {
   PASSWORD_RESET_SUCCESS: 'Password Reset Successfully.',
   REFRESH_TOKEN_SUCCESS: 'Refresh Token Successfully.',
   USER_UPDATE_SUCCESS: 'User Updated Successfully.',
+  USER_FETCH_SUCCESS: 'User Fetched Successfully.',
+  INSTRUCTOR_FETCH_SUCCESS: 'Instructor Fetched Successfully.',
   /* Content Messages */
   COURSE_ALREADY_EXISTS: 'Course Already Exists.',
   COURSE_NOT_FOUND: 'Course Not Found.',

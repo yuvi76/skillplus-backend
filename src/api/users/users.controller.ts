@@ -6,6 +6,8 @@ import {
   Req,
   UploadedFile,
   UseInterceptors,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,6 +17,7 @@ import { RolesGuard } from '../auth/guard/role.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import ResponseDto from '../../util/response.dto';
+import { ROLE } from 'src/enum/role.enum';
 
 @Controller('users')
 @ApiTags('Users')
@@ -34,7 +37,7 @@ export class UsersController {
 
   @Put('update-avatar')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @SetMetadata('roles', ['user'])
+  @SetMetadata('roles', [ROLE.USER])
   @UseInterceptors(FileInterceptor('file'))
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
@@ -54,5 +57,21 @@ export class UsersController {
     @Req() req: any,
   ): Promise<ResponseDto> {
     return this.usersService.updateProfileImage(req.user.userId, file);
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @SetMetadata('roles', [ROLE.USER])
+  @ApiBearerAuth()
+  async getProfile(@Req() req: any): Promise<ResponseDto> {
+    return this.usersService.getProfile(req.user.userId);
+  }
+
+  @Get('instructor-profile')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @SetMetadata('roles', [ROLE.USER, ROLE.INSTRUCTOR])
+  @ApiBearerAuth()
+  async getInstructorProfile(@Param('id') id: string): Promise<ResponseDto> {
+    return this.usersService.getInstructorProfile(id);
   }
 }

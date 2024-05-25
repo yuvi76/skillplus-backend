@@ -74,4 +74,40 @@ export class UsersService {
       await this.errorHandlerService.HttpException(error);
     }
   }
+
+  async getProfile(userId: string): Promise<ResponseDto> {
+    try {
+      const user = await this.userModel
+        .findById(userId)
+        .select({ password: 0 });
+      if (!user) {
+        throw new HttpException(MESSAGE.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: MESSAGE.USER_FETCH_SUCCESS,
+        data: user,
+      };
+    } catch (error) {
+      await this.errorHandlerService.HttpException(error);
+    }
+  }
+
+  async getInstructorProfile(id: string): Promise<ResponseDto> {
+    try {
+      const user = await this.userModel.findById(id).select({ password: 0 });
+      if (!user) {
+        throw new HttpException(MESSAGE.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: MESSAGE.INSTRUCTOR_FETCH_SUCCESS,
+        data: user,
+      };
+    } catch (error) {
+      await this.errorHandlerService.HttpException(error);
+    }
+  }
 }
