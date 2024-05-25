@@ -8,8 +8,8 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Learning Management System')
-    .setDescription('The Learning Management System API description')
+    .setTitle('Skill Plus API')
+    .setDescription('The Skill Plus API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
